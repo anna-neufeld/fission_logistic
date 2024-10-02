@@ -122,8 +122,21 @@ ggplot(data=globalnullres, aes(sample=pval, col=method))+
         legend.text=element_text(size=14),
         legend.title=element_text(size=14))+
   labs(col="Method")+
-  ggtitle("Uniform QQ plot of p-values", "under the global null")
+  ggtitle("Uniform QQ plot of p-values", "under the global null")+
+  scale_color_grey()
 ggsave("global_null_qq.png", width=5, height=4)
+
+ggplot(data=globalnullres, aes(sample=pval, col=method))+
+  geom_qq(distribution=qunif)+geom_abline(a=0,b=1)+theme_bw()+ylab("Sample quantiles")+xlab("Unif(0,1) quantiles")+
+  theme(axis.title =element_text(size=14),
+        plot.title=element_text(size=16),
+        plot.subtitle=element_text(size=16),
+        legend.text=element_text(size=14),
+        legend.title=element_text(size=14))+
+  labs(col="Method")+
+  ggtitle("Uniform QQ plot of p-values", "under the global null")+
+  scale_color_grey()
+ggsave("global_null_qq_bw.png", width=5, height=4)
 
 all_res <- all_res %>% filter(setting != "globalnull")
 
