@@ -1,5 +1,6 @@
 library(glmnet)
 library(tidyverse)
+library(clubSandwich)
 ntrials <- 2000
 n <- 500
 p <- 50
@@ -45,7 +46,7 @@ for (t in 1:ntrials) {
   if (length(selected.vars) > 0) {
     # Step 3, Example 2 method. 
     mod.fiss <- glm(y2fission~X[,selected.vars], family="binomial")
-    pvals.leiner <- clubSandwich::coef_test(mod.fiss, vcov = "CR0", cluster = factor(1:n), 
+    pvals.leiner <- coef_test(mod.fiss, vcov = "CR0", cluster = factor(1:n), 
                                             level = 0.95)[,6]
     counter=2
     for (var in selected.vars) {
@@ -123,7 +124,7 @@ ggplot(data=globalnullres, aes(sample=pval, col=method))+
         legend.title=element_text(size=14))+
   labs(col="Method")+
   ggtitle("Uniform QQ plot of p-values", "under the global null")+
-  scale_color_grey()
+  scale_color_manual(values=c("darkblue", "lightblue"))
 ggsave("global_null_qq.png", width=5, height=4)
 
 ggplot(data=globalnullres, aes(sample=pval, col=method))+
